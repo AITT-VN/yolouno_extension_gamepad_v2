@@ -1,0 +1,17 @@
+{
+    "name": "GAMEPAD V2",
+    "description": "Mục mở rộng cho Yolo UNO sử dụng GamePad v2",
+    "libs": [
+        "gamepad.py",
+        "gamepad_handler.py"
+    ],
+    "blocks": [
+        "definition.js"
+    ],
+    "toolbox": "toolbox.xml",
+    "languages": {
+        "en": "languages/en.js",
+        "vi": "languages/vi.js"
+    },
+    "poster": "poster.png"
+}
