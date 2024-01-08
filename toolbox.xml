@@ -59,5 +59,7 @@
       </value>
     </block>
 
+    <block type="gamepad_on_button_pressed" />
+
   </category>
 </xml>

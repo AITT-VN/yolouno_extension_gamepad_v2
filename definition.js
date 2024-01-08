@@ -1,4 +1,4 @@
-const GPV2GPV2ColorBlock = '#cb2026';
+const GPV2ColorBlock = '#cb2026';
 const ImgUrl = 'https://ohstem-public.s3.ap-southeast-1.amazonaws.com/extensions/AITT-VN/yolobit_extension_robocon_rover/images/';
 
 // GAMEPAD BLOCK
@@ -1018,4 +1018,105 @@ Blockly.Python["gamepad_is_connected"] = function (block) {
   // TODO: Assemble Python into code variable.
   var code = "gamepad_handler.is_connected()";
   return [code, Blockly.Python.ORDER_NONE];
+};
+
+Blockly.Blocks["gamepad_on_button_pressed"] = {
+  init: function () {
+    this.jsonInit({
+      colour: GPV2ColorBlock,
+      message0: 'nếu nút %1 được nhấn %2 %3 ',
+      tooltip: 'Thực hiện một tập lệnh khi nút được nhấn.',
+      args0: [
+        {
+          type: "field_dropdown",
+          name: "BUTTON",
+          options: [
+            [
+              {
+                "src": ImgUrl + 'ico-circle.png',
+                "width": 15,
+                "height": 15,
+                "alt": "*"
+              },
+              "circle"
+            ],
+            [
+              {
+                "src": ImgUrl + 'ico-cross.png',
+                "width": 15,
+                "height": 15,
+                "alt": "*"
+              },
+              "cross"
+            ],
+            [
+              {
+                "src": ImgUrl + 'ico-square.png',
+                "width": 15,
+                "height": 15,
+                "alt": "*"
+              },
+              "square"
+            ],
+            [
+              {
+                "src": ImgUrl + 'ico-triangle.png',
+                "width": 15,
+                "height": 15,
+                "alt": "*"
+              },
+              "triangle"
+            ],
+            ["A", "a"],
+            ["B", "b"],
+            ["X", "x"],
+            ["Y", "y"],
+            ["R1", "r1"],
+            ["L1", "l1"],
+            ["R2", "r2"],
+            ["L2", "l2"],
+            ["options", "m2"],
+            ["share", "m1"],
+            ["nút joystick trái", "thumbl"],
+            ["nút joystick phải", "thumbr"],
+          ],
+        },
+        {
+          type: "input_dummy",
+        },
+        {
+          type: "input_statement",
+          name: "ACTION",
+        },
+      ],
+      helpUrl: "",
+    });
+  },
+  getDeveloperVars: function () {
+    return ['gamepad_handler'];
+  }
+};
+
+Blockly.Python['gamepad_on_button_pressed'] = function (block) {
+  Blockly.Python.definitions_['import_remote_control'] = 'from remote_control import *';
+  var button = block.getFieldValue('BUTTON');
+  var statements_action = Blockly.Python.statementToCode(block, 'ACTION');
+
+  var globals = buildGlobalString(block);
+
+  var cbFunctionName = Blockly.Python.provideFunction_(
+    'on_gamepad_button_' + button,
+    (globals != '') ?
+      ['def ' + Blockly.Python.FUNCTION_NAME_PLACEHOLDER_ + '():',
+        globals,
+      statements_action || Blockly.Python.PASS
+      ] :
+      ['def ' + Blockly.Python.FUNCTION_NAME_PLACEHOLDER_ + '():',
+      statements_action || Blockly.Python.PASS
+      ]);
+
+  var code = 'gamepad_handler.set_command(BTN_' + button + ', ' + cbFunctionName + ')\n';
+  Blockly.Python.definitions_['on_gamepad_button_callback' + button] = code;
+
+  return '';
 };
